@@ -39,9 +39,7 @@ func main() {
 	
 	detail2 := loc.Find("8.8.3.1")
 	fmt.Printf("%t %t\n", detail.In(detail2.IP.String()), detail.String() == detail2.String())
-	
-	
-	
+
 	// output
 	// IP:8.8.0.8; 网段: 8.7.245.0 - 8.8.3.255; 美国 科罗拉多州布隆菲尔德市Level 3通信股份有限公司
 	// true true

@@ -10,8 +10,8 @@ import (
 	"time"
 
 	flag "github.com/spf13/pflag"
-	"github.com/golang/text/encoding/simplifiedchinese"
-	"github.com/golang/text/transform"
+	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/transform"
 
 	"github.com/kayon/iploc"
 )

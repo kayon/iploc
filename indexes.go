@@ -51,10 +51,6 @@ func (idx *indexes) getLocation(i, j uint32) Location {
 	return parseLocation(idx.locations[i], idx.locations[j])
 }
 
-func (idx *indexes) DumpRaw() (index [][4]uint32, locations map[uint32][]byte) {
-	return nil, nil
-}
-
 func newIndexes(p *Parser) *indexes {
 	idx := &indexes{
 		index: btree.New(10),

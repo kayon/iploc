@@ -11,7 +11,7 @@
 ## 安装
 
 ```
-go get github.com/kayon/iploc
+go get -u github.com/kayon/iploc/...
 ```
 
 #### 无法安装 `golang.org/x/text` 包，没有梯子使用下面方法

@@ -22,7 +22,7 @@ const (
 	<qqwry.dat>
 	原始下载地址 http://www.cz88.net/fox/ipdat.shtml
 	原版qqwry.dat, 字节序: LittleEndian 编码字符集: GBK
-	使用转换工具 ./tools/convert.go 转换为UTF-8
+	使用转换工具 iploc-conv 转换为UTF-8
 	文件内容结构, 所有偏移位置都是3字节的绝对偏移
 	<文件头 8字节|数据区|索引区 7字节的倍数>
 	[文件头]	索引区开始位置(4字节)|索引区结束位置(4字节)

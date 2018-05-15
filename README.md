@@ -1,5 +1,7 @@
 # iploc
 
+[![Build Status](https://travis-ci.org/kayon/iploc.svg?branch=master)](https://travis-ci.org/kayon/iploc)
+
 ```
 go get github.com/kayon/iploc
 ```

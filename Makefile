@@ -14,6 +14,7 @@ install:
 		cd cmd/iploc-gen; go install
 		cd cmd/iploc; $(IPLOC_GEN) ../../qqwry.dat -n; go install; rm ./iploc-binary.go
 		cd cmd/iploc-conv; go install
+
 test:
 		go test -v
 

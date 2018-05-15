@@ -70,7 +70,7 @@ func main() {
 
 ## 命令行工具
 
-####iploc
+#### iploc
 
 命令行版IP查询
 
@@ -80,7 +80,7 @@ $ 127.0.0.1 本机地址 N/A
 ```
 > DAT编译到二进制执行文件中，不依赖 `qqwry.dat` 位置
 
-####<a name="iploc-conv"></a>iploc-conv
+#### <a name="iploc-conv"></a>iploc-conv
 
 将原版 `qqwry.dat` 由 `GBK` 转换为 `UTF-8`
 
@@ -92,7 +92,7 @@ $ iploc-conv -s src.gbk.dat -d dst.utf8.dat
 
 > 修正原 qqwry.dat 中几处错误的重定向 (qqwry.dat 2018-05-10)，并将 "CZ88.NET" 替换为 "N/A"
 
-####iploc-gen
+#### iploc-gen
 
 创建静态版本的 **iploc** 集成到你的项目中
 

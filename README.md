@@ -46,16 +46,16 @@ func main() {
 }	
 ```
 
-### 快捷方法
-####Find(qqwrySrc, ip string) (*Detail, error)
+#### 快捷方法
+##### Find(qqwrySrc, ip string) (*Detail, error)
 `iploc.Find` 使用 `OpenWithoutIndexes`
 
 #### 初始化
-####Open(qqwrySrc string) (*Locator, error)
+##### Open(qqwrySrc string) (*Locator, error)
 
 `iploc.Open` 缓存并索引，生成索引需要耗时500毫秒左右，但会带来更高的查询性能
 
-####OpenWithoutIndexes(qqwrySrc string) (*Locator, error)
+##### OpenWithoutIndexes(qqwrySrc string) (*Locator, error)
 
 `iploc.OpenWithoutIndexes` 只读取文件头做简单检查，无索引
 
@@ -110,7 +110,7 @@ $ iploc-gen /path/qqwry.dat
 
 编译后的二进制没有 `qqwry.dat` 依赖，不需要再带着 `qqwry.dat` 一起打包了
 
-####示例
+##### 示例
 
 到项目目录 `$GOPATH/src/myproject/` 中
 

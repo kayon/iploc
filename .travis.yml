@@ -4,8 +4,8 @@ go:
   - 1.10.x
 install:
   - go get -u github.com/spf13/pflag
-  - go get -u golang.org/x/text/transform
-  - go get -u golang.org/x/text/encoding/simplifiedchinese
+  - go get -u github.com/golang/text/transform
+  - go get -u github.com/golang/text/encoding/simplifiedchinese
   - go get -u github.com/google/btree
   - make install
 script:

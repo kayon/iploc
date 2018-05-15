@@ -2,13 +2,25 @@
 
 [![Build Status](https://travis-ci.org/kayon/iploc.svg?branch=master)](https://travis-ci.org/kayon/iploc)
 
+使用纯真IP库 `qqwry.dat`，高性能，线程安全
+
+> 需要 go 1.9 或更高
+
+> 附带的 `qqwry.dat` 为 `UTF-8` 编码 `2018-05-10版本`
+
+## 安装
+
 ```
 go get github.com/kayon/iploc
 ```
 
-使用纯真IP库 `qqwry.dat`，高性能，线程安全
+#### 无法安装 `golang.org/x/text` 包，没有梯子使用下面方法
 
-> 附带的 `qqwry.dat` 为 `UTF-8` 编码 `2018-05-10版本`
+```
+$ mkdir -P $GOPATH/src/golang.org/x
+cd $GOPATH/src/golang.org/x
+git clone https://github.com/golang/text.git
+```
 
 ## 更新 qqwry.dat
 

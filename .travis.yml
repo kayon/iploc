@@ -1,11 +1,14 @@
 language: go
 go:
+  - 1.9
   - 1.10.x
 install:
-  go get -u github.com/spf13/pflag
-  go get -u golang.org/x/text/transform
-  go get -u golang.org/x/text/encoding/simplifiedchinese
-  go get -u github.com/google/btree
-
+  - go get -u github.com/spf13/pflag
+  - go get -u golang.org/x/text/transform
+  - go get -u golang.org/x/text/encoding/simplifiedchinese
+  - go get -u github.com/google/btree
+  - go install ./cmd/iploc-gen
+  - cd ./cmd/iploc/; PATH=$PATH:$HOME/gopath/bin iploc-gen qqwry.dat -n; go install; rm ./iploc-binary.go
+  - go install ./cmd/iploc-conv
 script:
   - go test

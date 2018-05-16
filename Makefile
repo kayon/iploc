@@ -7,12 +7,11 @@ IPLOC_CONV = $(GOPATH)/bin/iploc-conv
 all: install test
 
 clean:
-		go clean -i
 		rm -f $(IPLOC) $(IPLOC_GEN) $(IPLOC_CONV)
 
 install:
 		cd cmd/iploc-gen; go install
-		cd cmd/iploc; $(IPLOC_GEN) ../../qqwry.dat -n; go install; rm ./iploc-binary.go
+		cd cmd/iploc; $(IPLOC_GEN) ../../qqwry.dat -n; go install
 		cd cmd/iploc-conv; go install
 
 test:

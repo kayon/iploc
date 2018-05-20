@@ -2,11 +2,14 @@
 
 [![Build Status](https://travis-ci.org/kayon/iploc.svg?branch=master)](https://travis-ci.org/kayon/iploc)
 
-使用纯真IP库 `qqwry.dat`，高性能，线程安全
+使用纯真IP库 `qqwry.dat`，高性能，线程安全，并对国内数据格式化到省、市、县
 
 > 需要 go 1.9 或更高
 
-> 附带的 `qqwry.dat` 为 `UTF-8` 编码 `2018-05-15版本`
+> <del>附带的 `qqwry.dat` 为 `UTF-8` 编码 `2018-05-15版本`</del>
+
+> 不再提供 `qqwry.dat`, 新增命令行工具 `iploc-fetch`, 可在线获取官方最新版本的 `qqwry.dat`
+
 
 ## 安装
 
@@ -22,9 +25,29 @@ cd $GOPATH/src/golang.org/x
 git clone https://github.com/golang/text.git
 ```
 
-## 更新 qqwry.dat
+## 获取&更新 qqwry.dat
 
-在纯真官网[下载最新的 qqwry.dat](http://www.cz88.net/fox/ipdat.shtml) 并转换为 `UTF-8` 使用命令行工具 [iploc-conv](#iploc-conv)
+#### 1. 下载 `qqwry.dat`
+
+##### 方法一：使用命令行工具 [iploc-fetch](#iploc-fetch)
+
+下载到当前目录，保存为 `qqwry.gbk.dat`
+
+```
+$ iploc-fetch qqwry.gbk.dat
+```
+
+##### 方法二：手动下载
+
+在[纯真官网下载](http://www.cz88.net/fox/ipdat.shtml)并安装，复制安装目录中的 `qqwry.dat`
+
+#### 2. 转换为 `UTF-8`
+
+使用命令行工具 [iploc-conv](#iploc-conv) 将刚刚下载的 `qqwry.gbk.dat` 转换为 `UTF-8` 保存为 `qqwry.dat`
+
+```
+iploc-conv -s qqwry.gbk.dat -d qqwry.dat
+```
 
 
 ## Benchmarks
@@ -55,6 +78,15 @@ func main() {
 	// output
 	// IP:8.8.0.8; 网段: 8.7.245.0 - 8.8.3.255; 美国 科罗拉多州布隆菲尔德市Level 3通信股份有限公司
 	// true true
+	
+	detail = loc.Find("1.24.41.0")
+	fmt.Println(detail.String())
+	fmt.Println(detail.Country, detail.Province, detail.City, detail.County)
+	
+	// output
+	// 内蒙古锡林郭勒盟苏尼特右旗 联通
+	// 中国 内蒙古 锡林郭勒盟 苏尼特右旗
+	
 }	
 ```
 
@@ -82,16 +114,6 @@ func main() {
 
 ## 命令行工具
 
-#### iploc
-
-命令行版IP查询
-
-```
-$ iploc 127.1
-$ 127.0.0.1 本机地址 N/A
-```
-> DAT编译到二进制执行文件中，不依赖 `qqwry.dat` 位置
-
 #### <a name="iploc-conv"></a>iploc-conv
 
 将原版 `qqwry.dat` 由 `GBK` 转换为 `UTF-8`
@@ -104,6 +126,16 @@ $ iploc-conv -s src.gbk.dat -d dst.utf8.dat
 
 > 修正原 qqwry.dat 中几处错误的重定向 (qqwry.dat 2018-05-10)，并将 "CZ88.NET" 替换为 "N/A"
 
+#### <a name="iploc-fetch"></a>iploc-fetch
+
+从纯真官网下载最新 `qqwry.dat`
+
+```
+$ iploc-fetch qqwry.gbk.dat
+```
+
+> 下载后别忘了使用 `iploc-conv` 转换为 `UTF-8`
+
 #### iploc-gen
 
 创建静态版本的 **iploc** 集成到你的项目中
@@ -111,12 +143,13 @@ $ iploc-conv -s src.gbk.dat -d dst.utf8.dat
 `iploc-gen` 会在当前目录创建 iploc-binary.go 文件，拷贝到你的项目中，通过变量名 *IPLoc* 直接可以使用
 
 ```
-$ iploc-gen /path/qqwry.dat
+$ iploc-gen path/qqwry.dat
 ```
 
 > `--pkg` 指定 package name, 默认 main
 
 > `-n` 使用 `OpenWithoutIndexes` 初始化，无索引
+
 
 ## 静态编译 iploc 和 qqwry.dat 并集成到你的项目中
 
@@ -128,7 +161,7 @@ $ iploc-gen /path/qqwry.dat
 
 ```
 $ mkdir myloc && cd myloc
-$ iploc-gen $GOPATH/src/github.com/kayon/iploc/qqwry.dat --pkg myloc
+$ iploc-gen path/qqwry.dat --pkg myloc
 ```
 
 > $GOPATH/src/myproject/main.go

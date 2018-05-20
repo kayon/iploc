@@ -210,7 +210,7 @@ func check() {
 		fmt.Fprintf(os.Stderr, "it's not the same version")
 		os.Exit(1)
 	}
-	if logger, err = os.Create("output.log"); err != nil {
+	if logger, err = os.Create("iploc-conv.log"); err != nil {
 		fmt.Fprintf(os.Stderr, err.Error())
 		os.Exit(1)
 	}
@@ -238,9 +238,9 @@ func check() {
 		fmt.Printf("\rCheck %6.2f%% %*d/%d %s\n", 100.0, l, count, count, time.Since(st))
 	}
 	if warning > 0 {
-		fmt.Printf("%d warnings. please see output.log for more details\n", warning)
+		fmt.Printf("%d warnings. please see iploc-conv.log for more details\n", warning)
 	} else {
-		os.Remove("output.log")
+		os.Remove("iploc-conv.log")
 	}
 }
 

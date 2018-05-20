@@ -1,18 +1,25 @@
-IPLOC := $(GOPATH)/bin/iploc
-IPLOC_GEN = $(GOPATH)/bin/iploc-gen
 IPLOC_CONV = $(GOPATH)/bin/iploc-conv
+IPLOC_FETCH := $(GOPATH)/bin/iploc-fetch
+IPLOC_GEN = $(GOPATH)/bin/iploc-gen
 
-.PHONY: all test clean install
 
-all: install test
+.PHONY: all test clean install prepare
+
+all: install prepare test
 
 clean:
-		rm -f $(IPLOC) $(IPLOC_GEN) $(IPLOC_CONV)
+		rm -f $(IPLOC_CONV) $(IPLOC_FETCH) $(IPLOC_GEN)
+		rm -f qqwry.dat
 
 install:
-		cd cmd/iploc-gen; go install
-		cd cmd/iploc; $(IPLOC_GEN) ../../qqwry.dat -n; go install
 		cd cmd/iploc-conv; go install
+		cd cmd/iploc-fetch; go install
+		cd cmd/iploc-gen; go install
+
+prepare:
+		iploc-fetch ./qqwry.gbk.dat
+		iploc-conv -s qqwry.gbk.dat -d qqwry.dat -n
+		rm qqwry.gbk.dat
 
 test:
 		go test -v

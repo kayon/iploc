@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"encoding/binary"
 	"fmt"
@@ -82,13 +83,18 @@ func main() {
 		raw              iploc.LocationRaw
 		locOffset        = make(map[uint32]uint32)
 		locPos           = make(map[string]uint32)
-		body, indexes, s []byte
+		indexes, s []byte
 		head             [8]byte
 		offset, o        uint32
 		has              bool
 		count            = parser.Count()
 		l                = len(fmt.Sprint(count))
+		w, n                int
+		wt = bufio.NewWriter(f)
 	)
+
+	// write head 8 bytes
+	wt.Write(head[:])
 
 	// head 8 bytes
 	offset = 8
@@ -98,7 +104,8 @@ func main() {
 		}
 		raw = parser.ReadLocationRaw(int64(pos))
 		// write end ip 4 bytes
-		body = append(body, iploc.ParseUintIP(end).ReverseBytes()...)
+		w, _ = wt.Write(iploc.ParseUintIP(end).ReverseBytes())
+		n += w
 		// write start ip 4 bytes
 		indexes = append(indexes, iploc.ParseUintIP(start).ReverseBytes()...)
 		// write offset 3 bytes
@@ -133,18 +140,20 @@ func main() {
 
 		if raw.Text[0] != nil {
 			if raw.Mode[0] != 0x00 {
-				body = append(body, raw.Mode[0])
+				w, _ = wt.Write([]byte{raw.Mode[0]})
+				n += w
 				offset += 1
 			}
 			locOffset[raw.Pos[0]] = offset
 			s = toUTF8(raw.Text[0])
 			locPos[string(s)] = raw.Pos[0]
-			body = append(body, s...)
-			body = append(body, 0x00)
+			w, _ = wt.Write(append(s, 0x00))
+			n += w
 			offset += uint32(len(s)) + 1
 		} else {
 			o = locOffset[raw.Pos[0]]
-			body = append(body, raw.Mode[0], byte(o), byte(o>>8), byte(o>>16))
+			w, _ = wt.Write([]byte{raw.Mode[0], byte(o), byte(o>>8), byte(o>>16)})
+			n += w
 			offset += 4 // 1+3
 		}
 
@@ -157,12 +166,13 @@ func main() {
 				s = []byte{78, 47, 65} // N/A
 			}
 			locPos[string(s)] = raw.Pos[1]
-			body = append(body, s...)
-			body = append(body, 0x00)
+			w, _ = wt.Write(append(s, 0x00))
+			n += w
 			offset += uint32(len(s)) + 1
 		} else {
 			o = locOffset[raw.Pos[1]]
-			body = append(body, 0x02, byte(o), byte(o>>8), byte(o>>16))
+			w, _ = wt.Write([]byte{0x02, byte(o), byte(o>>8), byte(o>>16)})
+			n += w
 			offset += 4
 		}
 		return true
@@ -172,13 +182,13 @@ func main() {
 		fmt.Printf("\rBuild %6.2f%% %*d/%d %s\n", 100.0, l, count, count, time.Since(st))
 	}
 
-	min := len(body) + 8
+	min := n + 8
 	max := min + len(indexes) - 7
 	binary.LittleEndian.PutUint32(head[:4], uint32(min))
 	binary.LittleEndian.PutUint32(head[4:], uint32(max))
-	f.Write(head[:])
-	f.Write(body)
-	f.Write(indexes)
+	wt.Write(indexes)
+	wt.Flush()
+	f.WriteAt(head[:], io.SeekStart)
 	f.Close()
 
 	if !noCheck {

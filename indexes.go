@@ -19,8 +19,24 @@ type dataItem = btree.Item
 type indexItem [4]uint32
 
 func (i indexItem) Less(than btree.Item) bool {
-	// 1:End < 0:Start
-	return i[1] < than.(indexItem)[0]
+	// 默认降序 1:End < 0:Start
+	if v, ok := than.(indexItem); ok {
+		return i[1] < v[0]
+
+	}
+	return i[1] < than.(indexItemAscend)[0]
+}
+
+// indexItem 升序
+type indexItemAscend [4]uint32
+
+func (i indexItemAscend) Less(than btree.Item) bool {
+	// 升序 0:End < 0:Start
+	if v, ok := than.(indexItem); ok {
+		return i[0] < v[0]
+
+	}
+	return i[0] < than.(indexItemAscend)[0]
 }
 
 type indexes struct {
@@ -37,7 +53,7 @@ func (idx *indexes) indexOf(u uint32) (hit indexItem) {
 			return false
 		})
 	} else if u < idx.indexMid[0] {
-		idx.index.AscendGreaterOrEqual(indexItem{u}, func(i btree.Item) bool {
+		idx.index.AscendGreaterOrEqual(indexItemAscend{u}, func(i btree.Item) bool {
 			hit = i.(indexItem)
 			return false
 		})

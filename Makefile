@@ -17,8 +17,8 @@ install:
 		cd cmd/iploc-gen; go install
 
 prepare:
-		iploc-fetch ./qqwry.gbk.dat
-		iploc-conv -s qqwry.gbk.dat -d qqwry.dat -n
+		iploc-fetch ./qqwry.gbk.dat -q
+		iploc-conv -s qqwry.gbk.dat -d qqwry.dat -n -q
 		rm qqwry.gbk.dat
 
 test:

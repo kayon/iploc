@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"strconv"
 
 	flag "github.com/spf13/pflag"
 	"golang.org/x/text/encoding/simplifiedchinese"
@@ -17,12 +16,13 @@ import (
 )
 
 const (
+	userAgent    = "Mozilla/3.0 (compatible; Indy Library)"
 	urlCopywrite = "http://update.cz88.net/ip/copywrite.rar"
 	urlQqwryDat  = "http://update.cz88.net/ip/qqwry.rar"
 )
 
 var (
-	outputFile string
+	outputFile  string
 	quiet, help bool
 
 	fileSize  uint64
@@ -45,16 +45,13 @@ func (w *FetchWriter) progress() {
 }
 
 func fetch(key uint32) error {
-	resp, err := http.Get(urlQqwryDat)
+	resp, err := newRequest(urlQqwryDat)
 	if err != nil {
 		return err
 	}
 	defer resp.Body.Close()
-	size, err := strconv.ParseUint(resp.Header.Get("Content-Length"), 10, 32)
-	if err != nil {
-		return err
-	}
-	if size != fileSize {
+
+	if uint64(resp.ContentLength) != fileSize {
 		return fmt.Errorf("the file size of the agreement is different")
 	}
 
@@ -113,7 +110,7 @@ func init() {
 }
 
 func main() {
-	resp, err := http.Get(urlCopywrite)
+	resp, err := newRequest(urlCopywrite)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, err.Error())
 		os.Exit(1)
@@ -135,6 +132,16 @@ func main() {
 	printf("fetch: ...")
 
 	fatal(fetch(key))
+}
+
+func newRequest(urls string) (*http.Response, error) {
+	req, err := http.NewRequest("GET", urls, nil)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("User-Agent", userAgent)
+	client := &http.Client{}
+	return client.Do(req)
 }
 
 func readVersion(p []byte) []byte {
@@ -170,7 +177,7 @@ func toUTF8(s []byte) (b []byte) {
 
 func fatal(err error) {
 	if err != nil {
-		fmt.Fprintf(os.Stderr, err.Error() + "\n")
+		fmt.Fprintf(os.Stderr, err.Error()+"\n")
 		os.Exit(1)
 	}
 }

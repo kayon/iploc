@@ -8,7 +8,6 @@ install:
   - go get -u golang.org/x/text/encoding/simplifiedchinese
   - go get -u github.com/google/btree
   - make install
-  - make prepare
 script:
   - make test
   - make clean

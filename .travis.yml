@@ -1,7 +1,6 @@
 language: go
 go:
   - 1.9
-  - 1.10.x
 install:
   - go get -u github.com/spf13/pflag
   - go get -u golang.org/x/text/transform

@@ -31,6 +31,8 @@ git clone https://github.com/golang/text.git
 
 ##### 方法一：使用命令行工具 [iploc-fetch](#iploc-fetch)
 
+由于服务器限制国外IP，只能使用国内网络。
+
 下载到当前目录，保存为 `qqwry.gbk.dat`
 
 ```
@@ -129,6 +131,8 @@ $ iploc-conv -s src.gbk.dat -d dst.utf8.dat
 #### <a name="iploc-fetch"></a>iploc-fetch
 
 从纯真官网下载最新 `qqwry.dat`
+
+由于服务器限制国外IP，只能使用国内网络。
 
 ```
 $ iploc-fetch qqwry.gbk.dat

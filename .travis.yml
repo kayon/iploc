@@ -9,5 +9,4 @@ install:
   - go get -u github.com/google/btree
   - make install
 script:
-  - make test
   - make clean
